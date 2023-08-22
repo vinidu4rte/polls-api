@@ -1,3 +1,4 @@
+import { MissingParamError } from '../errors/missing-param-error'
 import { SignUpController } from './signup'
 
 describe('SignUpController', () => {
@@ -16,7 +17,7 @@ describe('SignUpController', () => {
     const { statusCode, body } = response
 
     expect(statusCode).toBe(400)
-    expect(body).toEqual(new Error('Missing param: name'))
+    expect(body).toEqual(new MissingParamError('name'))
   })
 
   test('Ensure return 400 if no email is provided', () => {
@@ -34,6 +35,6 @@ describe('SignUpController', () => {
     const { statusCode, body } = response
 
     expect(statusCode).toBe(400)
-    expect(body).toEqual(new Error('Missing param: email'))
+    expect(body).toEqual(new MissingParamError('email'))
   })
 })

@@ -1,6 +1,6 @@
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest } from '../helpers/http-helper'
+import { badRequest, created } from '../helpers/http-helper'
 import { type Controller } from '../protocols/controller'
 import { type EmailValidator } from '../protocols/email-validator'
 import { type HttpRequest, type HttpResponse } from '../protocols/http'
@@ -21,8 +21,13 @@ export class SignUpController implements Controller {
       }
     }
 
-    this.emailValidator.isValid(httpRequest.body.email)
+    const isEmailValid = this.emailValidator.isValid(httpRequest.body.email)
+    if (!isEmailValid) {
+      return badRequest(new InvalidParamError('email'))
+    }
 
-    return badRequest(new InvalidParamError('email'))
+    return created({
+      message: 'User successfully created.'
+    })
   }
 }

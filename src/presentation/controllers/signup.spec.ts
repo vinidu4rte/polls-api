@@ -1,7 +1,7 @@
 import { SignUpController } from './signup'
 
 describe('SignUpController', () => {
-  test('Ensure returns 400 if no name is provided', () => {
+  test('Ensure return 400 if no name is provided', () => {
     const sut = new SignUpController()
 
     const httpRequest = {
@@ -11,8 +11,9 @@ describe('SignUpController', () => {
     }
 
     const response = sut.handle(httpRequest)
-    const { statusCode } = response
+    const { statusCode, body } = response
 
     expect(statusCode).toBe(400)
+    expect(body).toEqual(new Error('Missing param: name'))
   })
 })

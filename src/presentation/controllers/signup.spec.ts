@@ -3,8 +3,12 @@ import { MissingParamError } from '../errors/missing-param-error'
 import { SignUpController } from './signup'
 
 describe('SignUpController', () => {
+  const makeSut = (): SignUpController => {
+    return new SignUpController()
+  }
+
   test('Ensure return 400 if no name is provided', () => {
-    const sut = new SignUpController()
+    const sut = makeSut()
 
     const httpRequest = {
       body: {
@@ -22,7 +26,7 @@ describe('SignUpController', () => {
   })
 
   test('Ensure return 400 if no email is provided', () => {
-    const sut = new SignUpController()
+    const sut = makeSut()
 
     const httpRequest = {
       body: {
@@ -40,7 +44,7 @@ describe('SignUpController', () => {
   })
 
   test('Ensure return 400 if no password is provided', () => {
-    const sut = new SignUpController()
+    const sut = makeSut()
 
     const httpRequest = {
       body: {
@@ -58,7 +62,7 @@ describe('SignUpController', () => {
   })
 
   test('Ensure return 400 if no password is provided', () => {
-    const sut = new SignUpController()
+    const sut = makeSut()
 
     const httpRequest = {
       body: {
@@ -76,7 +80,26 @@ describe('SignUpController', () => {
   })
 
   test('Ensure return 400 if email provided is not valid', () => {
-    const sut = new SignUpController()
+    const sut = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+    const { statusCode, body } = response
+
+    expect(statusCode).toBe(400)
+    expect(body).toEqual(new InvalidParamError('email'))
+  })
+
+  test('Ensure email validator is called with email field', () => {
+    const sut = makeSut()
 
     const httpRequest = {
       body: {

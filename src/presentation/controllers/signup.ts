@@ -1,5 +1,6 @@
+import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest, created } from '../helpers/http-helper'
+import { badRequest } from '../helpers/http-helper'
 import { type Controller } from '../protocols/controller'
 import { type HttpRequest, type HttpResponse } from '../protocols/http'
 
@@ -13,8 +14,6 @@ export class SignUpController implements Controller {
       }
     }
 
-    return created({
-      message: 'User successfully created.'
-    })
+    return badRequest(new InvalidParamError('email'))
   }
 }

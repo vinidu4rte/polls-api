@@ -1,3 +1,4 @@
+import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingParamError } from '../errors/missing-param-error'
 import { SignUpController } from './signup'
 
@@ -72,5 +73,24 @@ describe('SignUpController', () => {
 
     expect(statusCode).toBe(400)
     expect(body).toEqual(new MissingParamError('passwordConfirmation'))
+  })
+
+  test('Ensure return 400 if email provided is not valid', () => {
+    const sut = new SignUpController()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+    const { statusCode, body } = response
+
+    expect(statusCode).toBe(400)
+    expect(body).toEqual(new InvalidParamError('email'))
   })
 })
